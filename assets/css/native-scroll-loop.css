@@ -1,0 +1,242 @@
+.native-scroll-loop {
+  --native-scroll-loop-gap: var(--grid-column-gap, 20px);
+  --native-scroll-loop-columns: var(--grid-columns, 3);
+  --native-scroll-loop-arrow-color: currentColor;
+  --native-scroll-loop-arrow-background: transparent;
+  --native-scroll-loop-arrow-border-color: currentColor;
+  --native-scroll-loop-arrow-hover-color: currentColor;
+  --native-scroll-loop-arrow-hover-background: transparent;
+  --native-scroll-loop-arrow-hover-border-color: currentColor;
+  --native-scroll-loop-arrow-size: 48px;
+  --native-scroll-loop-arrow-icon-size: 18px;
+  --native-scroll-loop-arrow-border-width: 1px;
+  --native-scroll-loop-arrow-radius: 999px;
+  --native-scroll-loop-navigation-spacing: 20px;
+  --native-scroll-loop-progress-color: currentColor;
+  --native-scroll-loop-progress-track-color: color-mix(in srgb, currentColor 20%, transparent);
+  --native-scroll-loop-progress-height: 3px;
+  --native-scroll-loop-progress-spacing: 20px;
+  --native-scroll-loop-thumb-min-width: 40px;
+  --native-scroll-loop-computed-item-width: 100%;
+
+  position: relative;
+}
+
+.native-scroll-loop .elementor-loop-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(
+    --native-scroll-loop-item-width,
+    var(--native-scroll-loop-computed-item-width)
+  );
+  grid-template-columns: none;
+  column-gap: var(--native-scroll-loop-gap);
+  row-gap: 0;
+
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: 1px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.native-scroll-loop .elementor-loop-container::-webkit-scrollbar {
+  display: none;
+}
+
+.native-scroll-loop--snap-enabled.native-scroll-loop--snap-mandatory
+  .elementor-loop-container {
+  scroll-snap-type: x mandatory;
+}
+
+.native-scroll-loop--snap-enabled.native-scroll-loop--snap-proximity
+  .elementor-loop-container {
+  scroll-snap-type: x proximity;
+}
+
+.native-scroll-loop .elementor-loop-container > .e-loop-item {
+  min-width: 0;
+  grid-column: auto !important;
+  scroll-snap-align: start;
+}
+
+.native-scroll-loop--snap-stop
+  .elementor-loop-container
+  > .e-loop-item {
+  scroll-snap-stop: always;
+}
+
+.native-scroll-loop__controls {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--native-scroll-loop-navigation-spacing);
+  width: 100%;
+}
+
+.native-scroll-loop--initialized .native-scroll-loop__controls {
+  display: flex;
+}
+
+.native-scroll-loop__controls--top {
+  margin-block-end: var(--native-scroll-loop-navigation-spacing);
+}
+
+.native-scroll-loop__controls--bottom {
+  margin-block-start: var(--native-scroll-loop-navigation-spacing);
+}
+
+.native-scroll-loop__controls--progress {
+  margin-block-start: var(--native-scroll-loop-progress-spacing);
+}
+
+.native-scroll-loop__controls--split {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.native-scroll-loop__controls--split .native-scroll-loop__navigation {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.native-scroll-loop__navigation {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.native-scroll-loop__arrow {
+  display: inline-grid;
+  place-items: center;
+  width: var(--native-scroll-loop-arrow-size);
+  height: var(--native-scroll-loop-arrow-size);
+  padding: 0;
+  border: var(--native-scroll-loop-arrow-border-width) solid
+    var(--native-scroll-loop-arrow-border-color);
+  border-radius: var(--native-scroll-loop-arrow-radius);
+  background: var(--native-scroll-loop-arrow-background);
+  color: var(--native-scroll-loop-arrow-color);
+  font-size: var(--native-scroll-loop-arrow-icon-size);
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.native-scroll-loop__arrow:hover:not(:disabled) {
+  border-color: var(--native-scroll-loop-arrow-hover-border-color);
+  background: var(--native-scroll-loop-arrow-hover-background);
+  color: var(--native-scroll-loop-arrow-hover-color);
+  transform: translateY(-1px);
+}
+
+.native-scroll-loop__arrow:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.native-scroll-loop__arrow:disabled,
+.native-scroll-loop__arrow[aria-disabled='true'] {
+  opacity: 0.35;
+}
+
+.native-scroll-loop__arrow:disabled {
+  cursor: not-allowed;
+}
+
+.native-scroll-loop__arrow:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.native-scroll-loop__arrow svg {
+  width: 1em;
+  height: 1em;
+}
+
+.native-scroll-loop__scroller:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.native-scroll-loop__progress {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 80px;
+  height: var(--native-scroll-loop-progress-height);
+  overflow: hidden;
+  background: var(--native-scroll-loop-progress-track-color);
+}
+
+.native-scroll-loop__progress-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--native-scroll-loop-progress-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+[dir='rtl'] .native-scroll-loop__progress-bar {
+  transform-origin: right center;
+}
+
+.native-scroll-loop__progress--thumb {
+  overflow: visible;
+}
+
+.native-scroll-loop__progress--thumb .native-scroll-loop__progress-bar {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: var(--native-scroll-loop-thumb-width, var(--native-scroll-loop-thumb-min-width));
+  transform: translateX(var(--native-scroll-loop-thumb-offset, 0));
+  transform-origin: center;
+}
+
+[dir='rtl']
+  .native-scroll-loop__progress--thumb
+  .native-scroll-loop__progress-bar {
+  transform: translateX(calc(-1 * var(--native-scroll-loop-thumb-offset, 0)));
+}
+
+.native-scroll-loop--initialized.native-scroll-loop--no-overflow
+  .native-scroll-loop__controls {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .native-scroll-loop--hide-arrows-mobile .native-scroll-loop__navigation {
+    display: none;
+  }
+
+  .native-scroll-loop--hide-arrows-mobile
+    .native-scroll-loop__controls:has(.native-scroll-loop__progress) {
+    margin-block-start: var(--native-scroll-loop-progress-spacing);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .native-scroll-loop .elementor-loop-container {
+    scroll-behavior: auto;
+  }
+
+  .native-scroll-loop__arrow,
+  .native-scroll-loop__progress-bar {
+    transition-duration: 0.01ms;
+  }
+}
