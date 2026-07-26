@@ -1,5 +1,11 @@
 # Native Scroll Loop — Implementation Plan
 
+## Implementation Status — 2026-07-26
+
+The hook-based architecture described in this plan is implemented. The plugin now includes dependency-safe bootstrap, original-widget control injection, render integration, conditional assets, native scrolling CSS, an Elementor frontend handler, automated PHP/JavaScript tests, integration notes, and a manual QA checklist.
+
+The source-verified compatibility decisions are recorded in `docs/elementor-integration-notes.md`. Browser and Elementor editor checks remain pending by explicit owner request and are listed in `docs/manual-qa-checklist.md`.
+
 ## 1. Objective
 
 Build a production-ready WordPress plugin that adds an optional native horizontal carousel mode to the existing Elementor Pro Loop Grid widget.

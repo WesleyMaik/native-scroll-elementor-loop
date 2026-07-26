@@ -2,7 +2,7 @@
 
 ## Scope and verdict
 
-This document records the source-code inspection performed against the locally installed WordPress, Elementor, and PRO Elements copies. No third-party files were changed and no carousel behavior was implemented.
+This document records the source-code inspection performed against the locally installed WordPress, Elementor, and PRO Elements copies. No third-party files were changed. The resulting hook-based carousel architecture was implemented in this plugin after these findings were approved.
 
 The hook-based extension architecture is viable in the installed versions. The original `loop-grid` widget can remain responsible for its query, skins, Loop Item rendering, pagination, filters, editor preview, and existing assets. The extension can add controls through widget-specific control hooks, add state to the widget wrapper before render, filter only the rendered Loop Grid content to add navigation/progress markup, and attach an additional Elementor frontend handler for every supported Loop Grid skin.
 
@@ -223,7 +223,7 @@ The same instance-replacement strategy used for Taxonomy Filter applies. The new
 9. **RTL scrolling:** browser `scrollLeft` semantics differ in RTL. Progress, limits, keyboard direction, and autoplay need normalized logical scroll calculations.
 10. **Empty and no-overflow states:** editor empty views and no-results responses have no loop container. Initialization must be a no-op and controls must remain hidden.
 11. **Internal selector stability:** `.elementor-loop-container` and `.e-loop-item` are confirmed in this installation but originate in PRO implementation details. Selector checks must fail safely and compatibility notes must be updated on upgrades.
-12. **Late conditional styles:** enqueueing a stylesheet only during widget rendering can occur after the page head has printed. Asset loading strategy must be verified in both theme frontend and editor preview to avoid a flash of unstyled content.
+12. **Style timing:** enqueueing a stylesheet only during widget rendering can occur after the page head has printed. The implementation therefore enqueues its small stylesheet through Elementor's frontend style lifecycle and keeps the behavior script conditional on an enabled Loop Grid.
 
 ## Recommended final architecture
 
