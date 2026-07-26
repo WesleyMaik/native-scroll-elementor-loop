@@ -55,9 +55,9 @@ Taxonomy Filter and AJAX pagination replace `.elementor-widget-container` and re
 
 Run the local automated checks from this directory:
 
-```powershell
-rtk proxy php tests/php/run.php
-rtk proxy node tests/js/native-scroll-loop.test.js
+```bash
+php tests/php/run.php
+node tests/js/native-scroll-loop.test.js
 ```
 
 Browser and Elementor editor acceptance checks are intentionally manual. See `docs/manual-qa-checklist.md`.
