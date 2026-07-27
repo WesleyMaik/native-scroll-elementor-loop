@@ -655,6 +655,38 @@
     };
   }
 
+  function initializeExistingWidgets(windowObject, Handler) {
+    if (!windowObject.document || typeof windowObject.jQuery !== 'function') {
+      return 0;
+    }
+
+    const wrappers = windowObject.document.querySelectorAll(
+      '[data-native-scroll-loop="true"][data-widget_type^="loop-grid."]'
+    );
+    let initializedCount = 0;
+
+    wrappers.forEach((wrapper) => {
+      if (instances.has(wrapper)) {
+        return;
+      }
+
+      const elementName = wrapper.getAttribute('data-widget_type') || '';
+      const skin = elementName.split('.')[1] || '';
+
+      if (!supportedSkins.includes(skin)) {
+        return;
+      }
+
+      new Handler({
+        $element: windowObject.jQuery(wrapper),
+        elementName,
+      });
+      initializedCount += 1;
+    });
+
+    return initializedCount;
+  }
+
   function attachHandlers(windowObject) {
     if (
       handlersAttached
@@ -670,6 +702,8 @@
     supportedSkins.forEach((skin) => {
       windowObject.elementorFrontend.elementsHandler.attachHandler('loop-grid', Handler, skin);
     });
+
+    initializeExistingWidgets(windowObject, Handler);
   }
 
   function register(windowObject) {
@@ -689,6 +723,7 @@
     getAdvanceDistance,
     getNavigationTarget,
     getVisibleItemsCount,
+    initializeExistingWidgets,
     logicalToRaw,
     parseConfig,
     rawToLogical,

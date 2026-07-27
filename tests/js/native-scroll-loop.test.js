@@ -60,6 +60,30 @@ if (fs.existsSync(modulePath)) {
     assert.equal(utilities.getNavigationTarget(1, 100, 300, 100, true), 200);
   });
 
+  test('initializes existing enabled wrappers when handler registration is late', () => {
+    const wrappers = [
+      { getAttribute: () => 'loop-grid.post' },
+      { getAttribute: () => 'loop-grid.product' },
+    ];
+    const initialized = [];
+    const windowObject = {
+      document: {
+        querySelectorAll: () => wrappers,
+      },
+      jQuery: (wrapper) => ({ 0: wrapper }),
+    };
+
+    class Handler {
+      constructor(options) {
+        initialized.push(options);
+      }
+    }
+
+    assert.equal(utilities.initializeExistingWidgets(windowObject, Handler), 2);
+    assert.deepEqual(initialized.map(({ elementName }) => elementName), ['loop-grid.post', 'loop-grid.product']);
+    assert.equal(initialized[0].$element[0], wrappers[0]);
+  });
+
   test('parses configuration defensively', () => {
     assert.deepEqual(utilities.parseConfig('{"enabled":true}'), { enabled: true });
     assert.deepEqual(utilities.parseConfig('invalid'), {});

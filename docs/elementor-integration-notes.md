@@ -162,6 +162,8 @@ The extension should rely on the standard skin-specific ready hook for initializ
 
 For live preview, behavior and styles are enqueued ahead of widget AJAX rerenders through `elementor/preview/enqueue_scripts` and `elementor/preview/enqueue_styles`. Controls that change markup, serialized behavior, icons, or layout use `render_type: template`, causing Elementor to rebuild the widget and rerun the skin-specific ready lifecycle. Style controls continue to use Elementor selectors for immediate CSS updates. Layout selectors deliberately outrank Elementor's generated per-document grid selectors, while scoped button selectors isolate navigation from global kit and reset button rules.
 
+`attachHandler()` only registers callbacks for future ready triggers; it does not initialize widgets whose ready trigger already ran. Because preview script timing can be later than the initial editor widget trigger, the frontend module also scans existing enabled Loop Grid wrappers once after handler registration and directly initializes only its own handler. Future editor rerenders continue through the official ready hook and the `WeakMap` teardown path.
+
 ## Taxonomy Filter integration
 
 The Taxonomy Filter widget uses:
