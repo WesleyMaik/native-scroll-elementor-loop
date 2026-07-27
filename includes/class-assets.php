@@ -50,4 +50,9 @@ final class Assets
     {
         wp_enqueue_style(self::STYLE_HANDLE);
     }
+
+    public function enqueue_script(): void
+    {
+        wp_enqueue_script(self::SCRIPT_HANDLE);
+    }
 }

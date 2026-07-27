@@ -87,6 +87,7 @@ final class Loop_Grid_Controls
                     'mandatory' => esc_html__('Mandatory', 'native-scroll-loop'),
                     'proximity' => esc_html__('Proximity', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_snap_enabled' => 'yes',
@@ -106,6 +107,7 @@ final class Loop_Grid_Controls
                     'smooth' => esc_html__('Smooth', 'native-scroll-loop'),
                     'instant' => esc_html__('Instant', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => ['nsl_enabled' => 'yes'],
             ]
         );
@@ -120,6 +122,7 @@ final class Loop_Grid_Controls
                     'item' => esc_html__('One item', 'native-scroll-loop'),
                     'group' => esc_html__('One visible group', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => ['nsl_enabled' => 'yes'],
             ]
         );
@@ -130,6 +133,7 @@ final class Loop_Grid_Controls
                 'label' => esc_html__('Carousel accessible label', 'native-scroll-loop'),
                 'type' => Controls_Manager::TEXT,
                 'default' => esc_html__('Scrollable items', 'native-scroll-loop'),
+                'render_type' => 'template',
                 'condition' => ['nsl_enabled' => 'yes'],
             ]
         );
@@ -155,6 +159,7 @@ final class Loop_Grid_Controls
                     'value' => 'eicon-chevron-left',
                     'library' => 'eicons',
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_show_arrows' => 'yes',
@@ -171,6 +176,7 @@ final class Loop_Grid_Controls
                     'value' => 'eicon-chevron-right',
                     'library' => 'eicons',
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_show_arrows' => 'yes',
@@ -189,6 +195,7 @@ final class Loop_Grid_Controls
                     'bottom-right' => esc_html__('Bottom right', 'native-scroll-loop'),
                     'split-sides' => esc_html__('Split sides', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_show_arrows' => 'yes',
@@ -197,7 +204,15 @@ final class Loop_Grid_Controls
         );
 
         $widget->add_control('nsl_hide_arrows_mobile', $this->switcher(esc_html__('Hide arrows on mobile', 'native-scroll-loop'), 'yes'));
-        $widget->add_control('nsl_disable_unavailable_arrows', $this->switcher(esc_html__('Disable unavailable arrows', 'native-scroll-loop'), 'yes'));
+        $widget->add_control(
+            'nsl_disable_unavailable_arrows',
+            array_merge(
+                $this->switcher(esc_html__('Disable unavailable arrows', 'native-scroll-loop'), 'yes'),
+                [
+                    'description' => esc_html__('When disabled, Next at the end returns to the beginning and Previous at the beginning goes to the end.', 'native-scroll-loop'),
+                ]
+            )
+        );
 
         $widget->add_control(
             'nsl_progress_heading',
@@ -221,6 +236,7 @@ final class Loop_Grid_Controls
                     'bar' => esc_html__('Growing bar', 'native-scroll-loop'),
                     'thumb' => esc_html__('Scrollbar thumb', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_show_progress' => 'yes',
@@ -238,6 +254,7 @@ final class Loop_Grid_Controls
                     'below' => esc_html__('Below carousel', 'native-scroll-loop'),
                     'beside-navigation' => esc_html__('Beside navigation', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_show_progress' => 'yes',
@@ -266,6 +283,7 @@ final class Loop_Grid_Controls
                 'min' => 1500,
                 'max' => 60000,
                 'step' => 100,
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_autoplay' => 'yes',
@@ -287,6 +305,7 @@ final class Loop_Grid_Controls
                 'min' => 0,
                 'max' => 60000,
                 'step' => 100,
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_autoplay' => 'yes',
@@ -304,6 +323,7 @@ final class Loop_Grid_Controls
                     'rewind' => esc_html__('Return to beginning', 'native-scroll-loop'),
                     'stop' => esc_html__('Stop at end', 'native-scroll-loop'),
                 ],
+                'render_type' => 'template',
                 'condition' => [
                     'nsl_enabled' => 'yes',
                     'nsl_autoplay' => 'yes',
@@ -336,6 +356,7 @@ final class Loop_Grid_Controls
                 'default' => [],
                 'tablet_default' => [],
                 'mobile_default' => ['size' => 78, 'unit' => '%'],
+                'render_type' => 'template',
                 'selectors' => [
                     '{{WRAPPER}}' => '--native-scroll-loop-item-width: {{SIZE}}{{UNIT}};',
                 ],
@@ -397,6 +418,7 @@ final class Loop_Grid_Controls
             'label' => $label,
             'type' => Controls_Manager::SWITCHER,
             'default' => $default,
+            'render_type' => 'template',
             'condition' => ['nsl_enabled' => 'yes'],
         ];
     }

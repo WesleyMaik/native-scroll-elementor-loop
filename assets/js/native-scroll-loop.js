@@ -88,6 +88,21 @@
     return Math.max(0, availableWidth / safeColumns);
   }
 
+  function getNavigationTarget(direction, current, maximum, distance, wrapAtEdges) {
+    const safeMaximum = Math.max(0, maximum);
+    const normalizedCurrent = clamp(current, 0, safeMaximum);
+
+    if (wrapAtEdges && 0 < direction && normalizedCurrent >= safeMaximum - 2) {
+      return 0;
+    }
+
+    if (wrapAtEdges && 0 > direction && normalizedCurrent <= 2) {
+      return safeMaximum;
+    }
+
+    return clamp(normalizedCurrent + distance * direction, 0, safeMaximum);
+  }
+
   function parseConfig(rawConfig) {
     if (typeof rawConfig !== 'string' || rawConfig === '') {
       return {};
@@ -350,15 +365,27 @@
         this.scrollToLogical(target);
       }
 
+      navigateManually(direction) {
+        const target = getNavigationTarget(
+          direction,
+          this.getLogicalScroll(),
+          this.getMaximumScroll(),
+          this.getScrollDistance(),
+          !this.config.disableUnavailableArrows
+        );
+
+        this.scrollToLogical(target);
+      }
+
       handlePrevious() {
         this.autoplayStoppedAtEnd = false;
-        this.scrollByDirection(-1);
+        this.navigateManually(-1);
         this.scheduleAutoplay();
       }
 
       handleNext() {
         this.autoplayStoppedAtEnd = false;
-        this.scrollByDirection(1);
+        this.navigateManually(1);
         this.scheduleAutoplay();
       }
 
@@ -660,6 +687,7 @@
     calculateProgress,
     clamp,
     getAdvanceDistance,
+    getNavigationTarget,
     getVisibleItemsCount,
     logicalToRaw,
     parseConfig,

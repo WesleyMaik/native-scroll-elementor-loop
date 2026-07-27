@@ -47,6 +47,8 @@ final class Plugin
         add_action('elementor/frontend/after_register_scripts', [$this->assets, 'register_script']);
         add_action('elementor/frontend/after_register_styles', [$this->assets, 'register_style']);
         add_action('elementor/frontend/after_enqueue_styles', [$this->assets, 'enqueue_style']);
+        add_action('elementor/preview/enqueue_styles', [$this->assets, 'enqueue_style']);
+        add_action('elementor/preview/enqueue_scripts', [$this->assets, 'enqueue_script']);
         add_action(
             'elementor/element/loop-grid/section_additional_options/after_section_end',
             [$this->controls, 'register']

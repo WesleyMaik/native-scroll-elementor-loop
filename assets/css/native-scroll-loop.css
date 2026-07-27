@@ -4,9 +4,9 @@
   --native-scroll-loop-arrow-color: currentColor;
   --native-scroll-loop-arrow-background: transparent;
   --native-scroll-loop-arrow-border-color: currentColor;
-  --native-scroll-loop-arrow-hover-color: currentColor;
-  --native-scroll-loop-arrow-hover-background: transparent;
-  --native-scroll-loop-arrow-hover-border-color: currentColor;
+  --native-scroll-loop-arrow-hover-color: var(--native-scroll-loop-arrow-color);
+  --native-scroll-loop-arrow-hover-background: var(--native-scroll-loop-arrow-background);
+  --native-scroll-loop-arrow-hover-border-color: var(--native-scroll-loop-arrow-border-color);
   --native-scroll-loop-arrow-size: 48px;
   --native-scroll-loop-arrow-icon-size: 18px;
   --native-scroll-loop-arrow-border-width: 1px;
@@ -22,7 +22,7 @@
   position: relative;
 }
 
-.native-scroll-loop .elementor-loop-container {
+.elementor-widget-loop-grid.native-scroll-loop .elementor-loop-container.elementor-grid {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: var(
@@ -41,21 +41,24 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.native-scroll-loop .elementor-loop-container::-webkit-scrollbar {
+.elementor-widget-loop-grid.native-scroll-loop
+  .elementor-loop-container.elementor-grid::-webkit-scrollbar {
   display: none;
 }
 
 .native-scroll-loop--snap-enabled.native-scroll-loop--snap-mandatory
-  .elementor-loop-container {
+  .elementor-loop-container.elementor-grid {
   scroll-snap-type: x mandatory;
 }
 
 .native-scroll-loop--snap-enabled.native-scroll-loop--snap-proximity
-  .elementor-loop-container {
+  .elementor-loop-container.elementor-grid {
   scroll-snap-type: x proximity;
 }
 
-.native-scroll-loop .elementor-loop-container > .e-loop-item {
+.elementor-widget-loop-grid.native-scroll-loop
+  .elementor-loop-container.elementor-grid
+  > .e-loop-item {
   min-width: 0;
   grid-column: auto !important;
   scroll-snap-align: start;
@@ -113,19 +116,28 @@
   gap: 10px;
 }
 
-.native-scroll-loop__arrow {
+.native-scroll-loop .native-scroll-loop__arrow {
   display: inline-grid;
   place-items: center;
+  appearance: none;
   width: var(--native-scroll-loop-arrow-size);
   height: var(--native-scroll-loop-arrow-size);
+  min-width: 0;
+  margin: 0;
   padding: 0;
   border: var(--native-scroll-loop-arrow-border-width) solid
     var(--native-scroll-loop-arrow-border-color);
   border-radius: var(--native-scroll-loop-arrow-radius);
   background: var(--native-scroll-loop-arrow-background);
   color: var(--native-scroll-loop-arrow-color);
+  box-shadow: none;
+  font-family: inherit;
   font-size: var(--native-scroll-loop-arrow-icon-size);
+  font-style: normal;
+  font-weight: 400;
   line-height: 1;
+  text-decoration: none;
+  text-transform: none;
   cursor: pointer;
   pointer-events: auto;
   transition:
@@ -136,32 +148,33 @@
     transform 180ms ease;
 }
 
-.native-scroll-loop__arrow:hover:not(:disabled) {
+.native-scroll-loop .native-scroll-loop__arrow:hover:not(:disabled),
+.native-scroll-loop .native-scroll-loop__arrow:focus:not(:disabled) {
   border-color: var(--native-scroll-loop-arrow-hover-border-color);
   background: var(--native-scroll-loop-arrow-hover-background);
   color: var(--native-scroll-loop-arrow-hover-color);
   transform: translateY(-1px);
 }
 
-.native-scroll-loop__arrow:active:not(:disabled) {
+.native-scroll-loop .native-scroll-loop__arrow:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.native-scroll-loop__arrow:disabled,
-.native-scroll-loop__arrow[aria-disabled='true'] {
+.native-scroll-loop .native-scroll-loop__arrow:disabled,
+.native-scroll-loop .native-scroll-loop__arrow[aria-disabled='true'] {
   opacity: 0.35;
 }
 
-.native-scroll-loop__arrow:disabled {
+.native-scroll-loop .native-scroll-loop__arrow:disabled {
   cursor: not-allowed;
 }
 
-.native-scroll-loop__arrow:focus-visible {
+.native-scroll-loop .native-scroll-loop__arrow:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
 
-.native-scroll-loop__arrow svg {
+.native-scroll-loop .native-scroll-loop__arrow svg {
   width: 1em;
   height: 1em;
 }
@@ -231,11 +244,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .native-scroll-loop .elementor-loop-container {
+  .elementor-widget-loop-grid.native-scroll-loop
+    .elementor-loop-container.elementor-grid {
     scroll-behavior: auto;
   }
 
-  .native-scroll-loop__arrow,
+  .native-scroll-loop .native-scroll-loop__arrow,
   .native-scroll-loop__progress-bar {
     transition-duration: 0.01ms;
   }
