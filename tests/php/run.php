@@ -45,7 +45,7 @@ namespace {
     const TEST_ROOT = __DIR__ . '/../..';
     const NATIVE_SCROLL_LOOP_FILE = TEST_ROOT . '/native-scroll-loop.php';
     const NATIVE_SCROLL_LOOP_URL = 'https://example.test/native-scroll-loop/';
-    const NATIVE_SCROLL_LOOP_VERSION = '1.0.0';
+    const NATIVE_SCROLL_LOOP_VERSION = '1.1.1';
     const ELEMENTOR_VERSION = '4.0.7';
     const ELEMENTOR_PRO_VERSION = '4.0.4.2';
 
@@ -137,6 +137,9 @@ namespace {
         /** @var string[] */
         public array $controlIds = [];
 
+        /** @var array<string, array<string, mixed>> */
+        public array $controlArguments = [];
+
         /** @param array<string, mixed> $settings */
         public function __construct(array $settings = [])
         {
@@ -174,12 +177,14 @@ namespace {
         public function add_control(string $id, array $arguments): void
         {
             $this->controlIds[] = $id;
+            $this->controlArguments[$id] = $arguments;
         }
 
         /** @param array<string, mixed> $arguments */
         public function add_responsive_control(string $id, array $arguments): void
         {
             $this->controlIds[] = $id;
+            $this->controlArguments[$id] = $arguments;
         }
     }
 
@@ -259,6 +264,14 @@ namespace {
         assert_same(in_array($control_id, $controls_widget->controlIds, true), true, $control_id . ' is registered.');
     }
 
+    foreach (['nsl_enabled', 'nsl_snap_enabled', 'nsl_show_arrows', 'nsl_arrow_position', 'nsl_show_progress'] as $rerender_control_id) {
+        assert_same(
+            $controls_widget->controlArguments[$rerender_control_id]['render_type'] ?? '',
+            'template',
+            $rerender_control_id . ' rerenders the editor preview.'
+        );
+    }
+
     $assets = new Assets();
     $renderer = new Loop_Grid_Render($assets);
     $disabled_widget = new FakeLoopGrid();
@@ -293,6 +306,8 @@ namespace {
         'elementor/frontend/after_register_scripts',
         'elementor/frontend/after_register_styles',
         'elementor/frontend/after_enqueue_styles',
+        'elementor/preview/enqueue_styles',
+        'elementor/preview/enqueue_scripts',
         'elementor/element/loop-grid/section_additional_options/after_section_end',
         'elementor/frontend/widget/before_render',
     ] as $hook) {
@@ -301,6 +316,7 @@ namespace {
 
     assert_same(isset($GLOBALS['nsl_test_hooks']['filters']['elementor/widget/render_content']), true, 'Widget content filter is registered.');
     assert_same(is_file(TEST_ROOT . '/native-scroll-loop.php'), true, 'Plugin bootstrap exists.');
+    assert_contains('Version: 1.1.1', (string) file_get_contents(TEST_ROOT . '/native-scroll-loop.php'), 'Plugin version invalidates cached frontend assets.');
     assert_same(is_file(TEST_ROOT . '/uninstall.php'), true, 'Uninstall entry point exists.');
 
     $stylesheet_file = TEST_ROOT . '/assets/css/native-scroll-loop.css';
@@ -308,7 +324,7 @@ namespace {
     $stylesheet = is_file($stylesheet_file) ? (string) file_get_contents($stylesheet_file) : '';
 
     foreach ([
-        '.native-scroll-loop .elementor-loop-container',
+        '.elementor-widget-loop-grid.native-scroll-loop .elementor-loop-container.elementor-grid',
         'overflow-x: auto',
         'overscroll-behavior-inline: contain',
         'scroll-snap-type: x mandatory',
@@ -316,6 +332,7 @@ namespace {
         '> .e-loop-item',
         'scroll-snap-align: start',
         '.native-scroll-loop--initialized .native-scroll-loop__controls',
+        '.native-scroll-loop .native-scroll-loop__arrow:focus',
         '@media (prefers-reduced-motion: reduce)',
     ] as $css_requirement) {
         assert_contains($css_requirement, $stylesheet, $css_requirement . ' is present in the stylesheet.');

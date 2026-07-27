@@ -52,6 +52,14 @@ if (fs.existsSync(modulePath)) {
     assert.equal(utilities.calculateItemWidth(100, 3, 80), 0);
   });
 
+  test('wraps manual navigation only when endpoint wrapping is enabled', () => {
+    assert.equal(utilities.getNavigationTarget(1, 300, 300, 100, true), 0);
+    assert.equal(utilities.getNavigationTarget(-1, 0, 300, 100, true), 300);
+    assert.equal(utilities.getNavigationTarget(1, 300, 300, 100, false), 300);
+    assert.equal(utilities.getNavigationTarget(-1, 0, 300, 100, false), 0);
+    assert.equal(utilities.getNavigationTarget(1, 100, 300, 100, true), 200);
+  });
+
   test('parses configuration defensively', () => {
     assert.deepEqual(utilities.parseConfig('{"enabled":true}'), { enabled: true });
     assert.deepEqual(utilities.parseConfig('invalid'), {});
