@@ -66,9 +66,13 @@ if (fs.existsSync(modulePath)) {
       { getAttribute: () => 'loop-grid.product' },
     ];
     const initialized = [];
+    let queriedSelector = '';
     const windowObject = {
       document: {
-        querySelectorAll: () => wrappers,
+        querySelectorAll: (selector) => {
+          queriedSelector = selector;
+          return wrappers;
+        },
       },
       jQuery: (wrapper) => ({ 0: wrapper }),
     };
@@ -82,6 +86,22 @@ if (fs.existsSync(modulePath)) {
     assert.equal(utilities.initializeExistingWidgets(windowObject, Handler), 2);
     assert.deepEqual(initialized.map(({ elementName }) => elementName), ['loop-grid.post', 'loop-grid.product']);
     assert.equal(initialized[0].$element[0], wrappers[0]);
+    assert.equal(queriedSelector, '[data-widget_type^="loop-grid."]');
+  });
+
+  test('reads configuration from inner marker when editor strips wrapper attributes', () => {
+    const marker = {
+      getAttribute: () => '{"enabled":true,"arrowPosition":"split-sides"}',
+    };
+    const root = {
+      getAttribute: () => null,
+      querySelector: (selector) => selector === '[data-native-scroll-loop-config]' ? marker : null,
+    };
+
+    assert.deepEqual(utilities.readConfigFromRoot(root), {
+      enabled: true,
+      arrowPosition: 'split-sides',
+    });
   });
 
   test('parses configuration defensively', () => {

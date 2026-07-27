@@ -116,6 +116,14 @@
     }
   }
 
+  function readConfigFromRoot(root) {
+    const wrapperConfig = root.getAttribute('data-native-scroll-settings');
+    const configMarker = root.querySelector('[data-native-scroll-loop-config]');
+    const markerConfig = configMarker?.getAttribute('data-native-scroll-settings') || '';
+
+    return parseConfig(wrapperConfig || markerConfig);
+  }
+
   function detectRtlScrollType(documentObject) {
     if (rtlScrollType) {
       return rtlScrollType;
@@ -159,7 +167,7 @@
           previousInstance.onDestroy();
         }
 
-        this.config = parseConfig(this.root.getAttribute('data-native-scroll-settings'));
+        this.config = readConfigFromRoot(this.root);
         this.container = this.root.querySelector('.elementor-loop-container');
 
         if (!this.config.enabled || !this.container) {
@@ -219,6 +227,12 @@
       }
 
       prepareMarkup() {
+        this.runtimeRootClasses = [
+          'native-scroll-loop',
+          `native-scroll-loop--${this.config.arrowPosition}`,
+          `native-scroll-loop--progress-${this.config.progressMode}`,
+        ];
+        this.root.classList.add(...this.runtimeRootClasses);
         this.root.classList.add('native-scroll-loop--initialized');
         this.root.classList.toggle('native-scroll-loop--snap-enabled', Boolean(this.config.snapEnabled));
         this.root.classList.toggle('native-scroll-loop--snap-mandatory', this.config.snapStrictness === 'mandatory');
@@ -623,6 +637,7 @@
 
         if (this.root) {
           this.root.style.removeProperty('--native-scroll-loop-computed-item-width');
+          this.root.classList.remove(...(this.runtimeRootClasses || []));
           this.root.classList.remove(
             'native-scroll-loop--initialized',
             'native-scroll-loop--snap-enabled',
@@ -660,9 +675,7 @@
       return 0;
     }
 
-    const wrappers = windowObject.document.querySelectorAll(
-      '[data-native-scroll-loop="true"][data-widget_type^="loop-grid."]'
-    );
+    const wrappers = windowObject.document.querySelectorAll('[data-widget_type^="loop-grid."]');
     let initializedCount = 0;
 
     wrappers.forEach((wrapper) => {
@@ -727,6 +740,7 @@
     logicalToRaw,
     parseConfig,
     rawToLogical,
+    readConfigFromRoot,
     register,
   };
 });

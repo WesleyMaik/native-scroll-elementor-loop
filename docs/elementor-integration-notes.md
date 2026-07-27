@@ -164,6 +164,8 @@ For live preview, behavior and styles are enqueued ahead of widget AJAX rerender
 
 `attachHandler()` only registers callbacks for future ready triggers; it does not initialize widgets whose ready trigger already ran. Because preview script timing can be later than the initial editor widget trigger, the frontend module also scans existing enabled Loop Grid wrappers once after handler registration and directly initializes only its own handler. Future editor rerenders continue through the official ready hook and the `WeakMap` teardown path.
 
+The editor's client-side element view rebuilds the outer widget wrapper and does not preserve custom wrapper classes or `data-*` attributes added by PHP `before_render`. The render filter therefore emits a hidden, editor-safe configuration marker inside `.elementor-widget-container`, which is preserved. The handler reads this marker as a fallback and reconstructs its namespaced wrapper classes before initializing the scroller.
+
 ## Taxonomy Filter integration
 
 The Taxonomy Filter widget uses:

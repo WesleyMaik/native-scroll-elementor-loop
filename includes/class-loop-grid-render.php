@@ -58,6 +58,10 @@ final class Loop_Grid_Render
         }
 
         $config = Settings::to_frontend_config($settings);
+        $config_marker = sprintf(
+            '<span hidden data-native-scroll-loop-config data-native-scroll-settings="%s"></span>',
+            esc_attr(wp_json_encode($config))
+        );
         $navigation = $config['showArrows'] ? $this->render_navigation($settings) : '';
         $progress = $config['showProgress'] ? $this->render_progress((string) $config['progressMode']) : '';
         $before = '';
@@ -79,7 +83,7 @@ final class Loop_Grid_Render
             $after .= $this->render_controls('', 'progress', $progress);
         }
 
-        return $before . $content . $after;
+        return $config_marker . $before . $content . $after;
     }
 
     private function supports(Controls_Stack $widget): bool

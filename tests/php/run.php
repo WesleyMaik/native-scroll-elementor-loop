@@ -45,7 +45,7 @@ namespace {
     const TEST_ROOT = __DIR__ . '/../..';
     const NATIVE_SCROLL_LOOP_FILE = TEST_ROOT . '/native-scroll-loop.php';
     const NATIVE_SCROLL_LOOP_URL = 'https://example.test/native-scroll-loop/';
-    const NATIVE_SCROLL_LOOP_VERSION = '1.1.2';
+    const NATIVE_SCROLL_LOOP_VERSION = '1.1.3';
     const ELEMENTOR_VERSION = '4.0.7';
     const ELEMENTOR_PRO_VERSION = '4.0.4.2';
 
@@ -293,6 +293,7 @@ namespace {
     assert_same($enabled_widget->attributes['_wrapper']['data-native-scroll-loop'], 'true', 'Enabled wrapper receives its data marker.');
     assert_contains('native-scroll-loop__navigation', $rendered, 'Enabled content receives navigation.');
     assert_contains('native-scroll-loop__progress', $rendered, 'Enabled content receives progress.');
+    assert_contains('data-native-scroll-loop-config', $rendered, 'Enabled content carries editor-safe frontend configuration.');
     assert_contains('elementor-loop-container', $rendered, 'Original Loop Grid content is preserved.');
     assert_same(in_array(Assets::SCRIPT_HANDLE, $GLOBALS['nsl_test_enqueued'], true), true, 'Frontend script is enqueued only for enabled widgets.');
 
@@ -316,7 +317,7 @@ namespace {
 
     assert_same(isset($GLOBALS['nsl_test_hooks']['filters']['elementor/widget/render_content']), true, 'Widget content filter is registered.');
     assert_same(is_file(TEST_ROOT . '/native-scroll-loop.php'), true, 'Plugin bootstrap exists.');
-    assert_contains('Version: 1.1.2', (string) file_get_contents(TEST_ROOT . '/native-scroll-loop.php'), 'Plugin version invalidates cached frontend assets.');
+    assert_contains('Version: 1.1.3', (string) file_get_contents(TEST_ROOT . '/native-scroll-loop.php'), 'Plugin version invalidates cached frontend assets.');
     assert_same(is_file(TEST_ROOT . '/uninstall.php'), true, 'Uninstall entry point exists.');
 
     $stylesheet_file = TEST_ROOT . '/assets/css/native-scroll-loop.css';
