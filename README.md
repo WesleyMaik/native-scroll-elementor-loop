@@ -28,6 +28,7 @@ The Loop Grid remains unchanged while the feature is disabled. Carousel mode als
 - Native horizontal scrolling and touch dragging
 - Mandatory, proximity, or disabled CSS Scroll Snap
 - Item or visible-group arrow advance
+- Optional bidirectional edge wrapping when unavailable arrows remain enabled
 - Custom Elementor icons and style controls
 - Growing-bar and scrollbar-thumb progress modes
 - Optional autoplay with hover, focus, interaction, visibility, and reduced-motion safeguards
@@ -35,6 +36,7 @@ The Loop Grid remains unchanged while the feature is disabled. Carousel mode als
 - Logical RTL scroll normalization
 - Multiple independent Loop Grid instances
 - Elementor editor rerender cleanup
+- Live editor preview for behavioral, layout, icon, and style controls
 - Taxonomy Filter, AJAX pagination, and Load More refresh integration
 
 ## Architecture

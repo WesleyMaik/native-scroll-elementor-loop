@@ -160,6 +160,8 @@ For editor widget rerenders:
 
 The extension should rely on the standard skin-specific ready hook for initialization, implement complete `onDestroy()` cleanup, and fail without side effects when `.elementor-loop-container` is absent. The PRO-specific `editor/widgets/loop-grid/on-init` action can be observed only if a future editor-only adjustment is required; it is not needed for the primary lifecycle.
 
+For live preview, behavior and styles are enqueued ahead of widget AJAX rerenders through `elementor/preview/enqueue_scripts` and `elementor/preview/enqueue_styles`. Controls that change markup, serialized behavior, icons, or layout use `render_type: template`, causing Elementor to rebuild the widget and rerun the skin-specific ready lifecycle. Style controls continue to use Elementor selectors for immediate CSS updates. Layout selectors deliberately outrank Elementor's generated per-document grid selectors, while scoped button selectors isolate navigation from global kit and reset button rules.
+
 ## Taxonomy Filter integration
 
 The Taxonomy Filter widget uses:

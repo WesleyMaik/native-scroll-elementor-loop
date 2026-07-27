@@ -23,6 +23,7 @@ These runtime checks were intentionally left unexecuted for the site owner. Comp
 - [ ] Test item and visible-group arrow advance modes.
 - [ ] Test top-right, bottom-right, and split-side arrow placements.
 - [ ] Confirm unavailable arrows disable only when configured.
+- [ ] With unavailable arrows enabled, confirm Next wraps from end to beginning and Previous wraps from beginning to end.
 - [ ] Test growing-bar and scrollbar-thumb progress modes.
 - [ ] Confirm navigation and progress hide when content does not overflow.
 - [ ] Test ArrowLeft, ArrowRight, Home, and End from the focused scroller.
@@ -46,4 +47,3 @@ These runtime checks were intentionally left unexecuted for the site owner. Comp
 - [ ] Test AJAX numbered, previous, and next pagination.
 - [ ] Confirm progress, arrow limits, and autoplay refresh after every dynamic update.
 - [ ] Confirm no duplicate click, scroll, or autoplay behavior appears after repeated rerenders.
-
