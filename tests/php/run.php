@@ -45,7 +45,7 @@ namespace {
     const TEST_ROOT = __DIR__ . '/../..';
     const NATIVE_SCROLL_LOOP_FILE = TEST_ROOT . '/native-scroll-loop.php';
     const NATIVE_SCROLL_LOOP_URL = 'https://example.test/native-scroll-loop/';
-    const NATIVE_SCROLL_LOOP_VERSION = '1.1.3';
+    const NATIVE_SCROLL_LOOP_VERSION = '1.2.0';
     const ELEMENTOR_VERSION = '4.0.7';
     const ELEMENTOR_PRO_VERSION = '4.0.4.2';
 
@@ -246,6 +246,12 @@ namespace {
     assert_same($config['resumeDelay'], 60000, 'Resume delay is clamped to its maximum.');
     assert_same($config['autoplayEndBehavior'], 'rewind', 'Invalid autoplay end behavior uses the safe default.');
 
+    $dots_config = Settings::to_frontend_config([
+        'nsl_enabled' => 'yes',
+        'nsl_progress_mode' => 'dots',
+    ]);
+    assert_same($dots_config['progressMode'], 'dots', 'Dots is an allowed progress mode.');
+
     $controls_widget = new FakeLoopGrid();
     (new Loop_Grid_Controls())->register($controls_widget);
 
@@ -260,6 +266,8 @@ namespace {
         'section_native_scroll_loop_style',
         'nsl_arrow_size',
         'nsl_progress_height',
+        'nsl_progress_dot_size',
+        'nsl_progress_dot_gap',
     ] as $control_id) {
         assert_same(in_array($control_id, $controls_widget->controlIds, true), true, $control_id . ' is registered.');
     }
@@ -271,6 +279,12 @@ namespace {
             $rerender_control_id . ' rerenders the editor preview.'
         );
     }
+
+    assert_same(
+        isset($controls_widget->controlArguments['nsl_progress_mode']['options']['dots']),
+        true,
+        'Dots is available in the progress mode control.'
+    );
 
     $assets = new Assets();
     $renderer = new Loop_Grid_Render($assets);
@@ -297,6 +311,15 @@ namespace {
     assert_contains('elementor-loop-container', $rendered, 'Original Loop Grid content is preserved.');
     assert_same(in_array(Assets::SCRIPT_HANDLE, $GLOBALS['nsl_test_enqueued'], true), true, 'Frontend script is enqueued only for enabled widgets.');
 
+    $dots_widget = new FakeLoopGrid([
+        'nsl_enabled' => 'yes',
+        'nsl_show_arrows' => '',
+        'nsl_show_progress' => 'yes',
+        'nsl_progress_mode' => 'dots',
+    ]);
+    $dots_rendered = $renderer->filter_content('<div class="elementor-loop-container">original</div>', $dots_widget);
+    assert_contains('native-scroll-loop__progress--dots', $dots_rendered, 'Dots progress markup uses its dedicated mode class.');
+
     $masonry_widget = new FakeLoopGrid(['nsl_enabled' => 'yes', 'masonry' => 'yes']);
     assert_same($renderer->filter_content('original', $masonry_widget), 'original', 'Masonry content is unchanged.');
 
@@ -317,7 +340,7 @@ namespace {
 
     assert_same(isset($GLOBALS['nsl_test_hooks']['filters']['elementor/widget/render_content']), true, 'Widget content filter is registered.');
     assert_same(is_file(TEST_ROOT . '/native-scroll-loop.php'), true, 'Plugin bootstrap exists.');
-    assert_contains('Version: 1.1.3', (string) file_get_contents(TEST_ROOT . '/native-scroll-loop.php'), 'Plugin version invalidates cached frontend assets.');
+    assert_contains('Version: 1.2.0', (string) file_get_contents(TEST_ROOT . '/native-scroll-loop.php'), 'Plugin version invalidates cached frontend assets.');
     assert_same(is_file(TEST_ROOT . '/uninstall.php'), true, 'Uninstall entry point exists.');
 
     $stylesheet_file = TEST_ROOT . '/assets/css/native-scroll-loop.css';
@@ -334,6 +357,8 @@ namespace {
         'scroll-snap-align: start',
         '.native-scroll-loop--initialized .native-scroll-loop__controls',
         '.native-scroll-loop .native-scroll-loop__arrow:focus',
+        '.native-scroll-loop__progress--dots',
+        '.native-scroll-loop__dot--active',
         '@media (prefers-reduced-motion: reduce)',
     ] as $css_requirement) {
         assert_contains($css_requirement, $stylesheet, $css_requirement . ' is present in the stylesheet.');

@@ -52,6 +52,22 @@ if (fs.existsSync(modulePath)) {
     assert.equal(utilities.calculateItemWidth(100, 3, 80), 0);
   });
 
+  test('builds informational dot targets from reachable scroll positions', () => {
+    assert.deepEqual(utilities.getDotTargets(600, 200), [0, 200, 400, 600]);
+    assert.deepEqual(utilities.getDotTargets(650, 200), [0, 200, 400, 600, 650]);
+    assert.deepEqual(utilities.getDotTargets(0, 200), [0]);
+    assert.deepEqual(utilities.getDotTargets(600, 0), [0, 600]);
+  });
+
+  test('selects the closest informational dot for the current scroll position', () => {
+    const targets = [0, 200, 400, 600];
+
+    assert.equal(utilities.getClosestTargetIndex(0, targets), 0);
+    assert.equal(utilities.getClosestTargetIndex(275, targets), 1);
+    assert.equal(utilities.getClosestTargetIndex(350, targets), 2);
+    assert.equal(utilities.getClosestTargetIndex(600, targets), 3);
+  });
+
   test('wraps manual navigation only when endpoint wrapping is enabled', () => {
     assert.equal(utilities.getNavigationTarget(1, 300, 300, 100, true), 0);
     assert.equal(utilities.getNavigationTarget(-1, 0, 300, 100, true), 300);
