@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Native Scroll Loop
  * Description: Adds an optional native horizontal carousel mode to Elementor Pro Loop Grid.
- * Version: 1.1.3
+ * Version: 1.2.0
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Requires Plugins: elementor
@@ -16,7 +16,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('NATIVE_SCROLL_LOOP_VERSION', '1.1.3');
+define('NATIVE_SCROLL_LOOP_VERSION', '1.2.0');
 define('NATIVE_SCROLL_LOOP_FILE', __FILE__);
 define('NATIVE_SCROLL_LOOP_PATH', plugin_dir_path(__FILE__));
 define('NATIVE_SCROLL_LOOP_URL', plugin_dir_url(__FILE__));

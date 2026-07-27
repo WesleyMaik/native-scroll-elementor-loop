@@ -103,6 +103,46 @@
     return clamp(normalizedCurrent + distance * direction, 0, safeMaximum);
   }
 
+  function getDotTargets(maximum, distance) {
+    const safeMaximum = Math.max(0, Number(maximum) || 0);
+    const safeDistance = Math.max(0, Number(distance) || 0);
+
+    if (safeMaximum <= 2) {
+      return [0];
+    }
+
+    if (safeDistance <= 2) {
+      return [0, safeMaximum];
+    }
+
+    const targets = [0];
+    const maximumIntermediateDots = 499;
+
+    for (
+      let position = safeDistance;
+      position < safeMaximum - 2 && targets.length < maximumIntermediateDots;
+      position += safeDistance
+    ) {
+      targets.push(position);
+    }
+
+    targets.push(safeMaximum);
+    return targets;
+  }
+
+  function getClosestTargetIndex(position, targets) {
+    if (!Array.isArray(targets) || targets.length === 0) {
+      return 0;
+    }
+
+    return targets.reduce((closestIndex, target, index) => {
+      const closestDistance = Math.abs(position - targets[closestIndex]);
+      const currentDistance = Math.abs(position - target);
+
+      return currentDistance < closestDistance ? index : closestIndex;
+    }, 0);
+  }
+
   function parseConfig(rawConfig) {
     if (typeof rawConfig !== 'string' || rawConfig === '') {
       return {};
@@ -184,6 +224,8 @@
         this.pauseReasons = new Set();
         this.resumeTimers = new Map();
         this.items = [];
+        this.dots = [];
+        this.dotTargets = [];
         this.scrollFrame = 0;
         this.autoplayTimer = 0;
         this.autoplayStoppedAtEnd = false;
@@ -310,8 +352,32 @@
           this.scrollToLogical(maximum, 'auto');
         }
 
+        this.refreshDots();
         this.updateInterface();
         this.scheduleAutoplay();
+      }
+
+      refreshDots() {
+        if (this.config.progressMode !== 'dots' || !this.progressBar) {
+          return;
+        }
+
+        this.dotTargets = getDotTargets(this.getMaximumScroll(), this.getScrollDistance());
+
+        if (this.dots.length === this.dotTargets.length) {
+          return;
+        }
+
+        const fragment = this.documentObject.createDocumentFragment();
+        this.dots = this.dotTargets.map(() => {
+          const dot = this.documentObject.createElement('span');
+          dot.className = 'native-scroll-loop__dot';
+          dot.setAttribute('aria-hidden', 'true');
+          fragment.appendChild(dot);
+          return dot;
+        });
+
+        this.progressBar.replaceChildren(fragment);
       }
 
       updateLayout() {
@@ -441,7 +507,7 @@
         this.root.classList.toggle('native-scroll-loop--no-overflow', !hasOverflow);
         this.updateButton(this.previousButton, !hasOverflow || atStart);
         this.updateButton(this.nextButton, !hasOverflow || atEnd);
-        this.updateProgress(progress);
+        this.updateProgress(progress, position);
 
         if (!hasOverflow) {
           this.stopAutoplay();
@@ -462,12 +528,25 @@
         }
       }
 
-      updateProgress(progress) {
+      updateProgress(progress, position) {
         if (!this.progressElement || !this.progressBar) {
           return;
         }
 
         this.progressElement.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+
+        if (this.config.progressMode === 'dots') {
+          const activeIndex = getClosestTargetIndex(position, this.dotTargets);
+
+          this.dots.forEach((dot, index) => {
+            dot.classList.toggle('native-scroll-loop__dot--active', index === activeIndex);
+          });
+          this.progressElement.setAttribute(
+            'aria-valuetext',
+            `${activeIndex + 1} of ${Math.max(1, this.dotTargets.length)}`
+          );
+          return;
+        }
 
         if (this.config.progressMode !== 'thumb') {
           this.progressBar.style.transform = `scaleX(${progress})`;
@@ -733,7 +812,9 @@
     calculateItemWidth,
     calculateProgress,
     clamp,
+    getClosestTargetIndex,
     getAdvanceDistance,
+    getDotTargets,
     getNavigationTarget,
     getVisibleItemsCount,
     initializeExistingWidgets,

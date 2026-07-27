@@ -17,6 +17,8 @@
   --native-scroll-loop-progress-height: 3px;
   --native-scroll-loop-progress-spacing: 20px;
   --native-scroll-loop-thumb-min-width: 40px;
+  --native-scroll-loop-dot-size: 8px;
+  --native-scroll-loop-dot-gap: 8px;
   --native-scroll-loop-computed-item-width: 100%;
 
   position: relative;
@@ -221,6 +223,44 @@
   transform-origin: center;
 }
 
+.native-scroll-loop__progress--dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  overflow: visible;
+  background: transparent;
+}
+
+.native-scroll-loop__progress--dots .native-scroll-loop__progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--native-scroll-loop-dot-gap);
+  width: auto;
+  height: auto;
+  background: transparent;
+  transform: none;
+  will-change: auto;
+}
+
+.native-scroll-loop__dot {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--native-scroll-loop-dot-size);
+  height: var(--native-scroll-loop-dot-size);
+  border-radius: 50%;
+  background: var(--native-scroll-loop-progress-track-color);
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.native-scroll-loop__dot--active {
+  background: var(--native-scroll-loop-progress-color);
+  transform: scale(1.25);
+}
+
 [dir='rtl']
   .native-scroll-loop__progress--thumb
   .native-scroll-loop__progress-bar {
@@ -250,7 +290,8 @@
   }
 
   .native-scroll-loop .native-scroll-loop__arrow,
-  .native-scroll-loop__progress-bar {
+  .native-scroll-loop__progress-bar,
+  .native-scroll-loop__dot {
     transition-duration: 0.01ms;
   }
 }

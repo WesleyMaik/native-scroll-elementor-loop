@@ -235,6 +235,7 @@ final class Loop_Grid_Controls
                 'options' => [
                     'bar' => esc_html__('Growing bar', 'native-scroll-loop'),
                     'thumb' => esc_html__('Scrollbar thumb', 'native-scroll-loop'),
+                    'dots' => esc_html__('Dots', 'native-scroll-loop'),
                 ],
                 'render_type' => 'template',
                 'condition' => [
@@ -405,6 +406,30 @@ final class Loop_Grid_Controls
         $this->add_slider_control($widget, 'nsl_progress_height', esc_html__('Height', 'native-scroll-loop'), '--native-scroll-loop-progress-height', 1, 20, 3);
         $this->add_slider_control($widget, 'nsl_progress_spacing', esc_html__('Spacing', 'native-scroll-loop'), '--native-scroll-loop-progress-spacing', 0, 100, 20);
         $this->add_slider_control($widget, 'nsl_progress_thumb_min_width', esc_html__('Minimum thumb width', 'native-scroll-loop'), '--native-scroll-loop-thumb-min-width', 16, 200, 40);
+        $widget->add_control(
+            'nsl_progress_dot_size',
+            [
+                'label' => esc_html__('Dot size', 'native-scroll-loop'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => ['px' => ['min' => 4, 'max' => 32]],
+                'default' => ['size' => 8, 'unit' => 'px'],
+                'selectors' => ['{{WRAPPER}}' => '--native-scroll-loop-dot-size: {{SIZE}}{{UNIT}};'],
+                'condition' => ['nsl_progress_mode' => 'dots'],
+            ]
+        );
+        $widget->add_control(
+            'nsl_progress_dot_gap',
+            [
+                'label' => esc_html__('Dot spacing', 'native-scroll-loop'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => ['px' => ['min' => 0, 'max' => 40]],
+                'default' => ['size' => 8, 'unit' => 'px'],
+                'selectors' => ['{{WRAPPER}}' => '--native-scroll-loop-dot-gap: {{SIZE}}{{UNIT}};'],
+                'condition' => ['nsl_progress_mode' => 'dots'],
+            ]
+        );
 
         $widget->end_controls_section();
     }

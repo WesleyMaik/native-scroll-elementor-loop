@@ -73,7 +73,7 @@ final class Settings
             'hideArrowsMobile' => self::switch_value($settings, 'nsl_hide_arrows_mobile', true),
             'disableUnavailableArrows' => self::switch_value($settings, 'nsl_disable_unavailable_arrows', true),
             'showProgress' => self::switch_value($settings, 'nsl_show_progress', true),
-            'progressMode' => self::allowed_value($settings, 'nsl_progress_mode', ['bar', 'thumb'], 'bar'),
+            'progressMode' => self::allowed_value($settings, 'nsl_progress_mode', ['bar', 'thumb', 'dots'], 'bar'),
             'progressPlacement' => self::allowed_value($settings, 'nsl_progress_placement', ['below', 'beside-navigation'], 'below'),
             'autoplay' => self::switch_value($settings, 'nsl_autoplay', false),
             'autoplayInterval' => self::integer_value($settings, 'nsl_autoplay_interval', 5000, 1500, 60000),
