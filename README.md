@@ -30,7 +30,7 @@ The Loop Grid remains unchanged while the feature is disabled. Carousel mode als
 - Item or visible-group arrow advance
 - Optional bidirectional edge wrapping when unavailable arrows remain enabled
 - Custom Elementor icons and style controls
-- Growing-bar and scrollbar-thumb progress modes
+- Growing-bar, scrollbar-thumb, and informational dots progress modes
 - Optional autoplay with hover, focus, interaction, visibility, and reduced-motion safeguards
 - ArrowLeft, ArrowRight, Home, and End keyboard controls
 - Logical RTL scroll normalization
@@ -48,6 +48,12 @@ The Loop Grid remains unchanged while the feature is disabled. Carousel mode als
 - `assets/css/native-scroll-loop.css` changes only enabled Loop Grid containers into horizontal tracks.
 
 The handler owns one instance per widget wrapper through a `WeakMap`. It completely removes listeners, observers, timers, animation frames, classes, and temporary attributes during teardown.
+
+### Informational dots
+
+The Dots progress mode renders non-interactive visual indicators for the carousel's reachable scroll positions. Dot count follows the configured arrow advance mode: item advance creates item-step positions, while visible-group advance creates page-like positions. The active dot updates during native scrolling, arrows, autoplay, resize, editor rerenders, Load More, Taxonomy Filter, and AJAX pagination.
+
+Dots reuse the Progress Color and Track Color controls. Dedicated Dot Size and Dot Spacing controls are available when the Dots mode is selected.
 
 ## Dynamic content
 

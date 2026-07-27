@@ -25,6 +25,9 @@ These runtime checks were intentionally left unexecuted for the site owner. Comp
 - [ ] Confirm unavailable arrows disable only when configured.
 - [ ] With unavailable arrows enabled, confirm Next wraps from end to beginning and Previous wraps from beginning to end.
 - [ ] Test growing-bar and scrollbar-thumb progress modes.
+- [ ] Test informational dots with item and visible-group arrow advance modes.
+- [ ] Confirm dots are visual only and cannot receive focus or clicks.
+- [ ] Confirm dot count and active state refresh after resize, Load More, filtering, and AJAX pagination.
 - [ ] Confirm navigation and progress hide when content does not overflow.
 - [ ] Test ArrowLeft, ArrowRight, Home, and End from the focused scroller.
 

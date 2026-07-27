@@ -166,6 +166,12 @@ For live preview, behavior and styles are enqueued ahead of widget AJAX rerender
 
 The editor's client-side element view rebuilds the outer widget wrapper and does not preserve custom wrapper classes or `data-*` attributes added by PHP `before_render`. The render filter therefore emits a hidden, editor-safe configuration marker inside `.elementor-widget-container`, which is preserved. The handler reads this marker as a fallback and reconstructs its namespaced wrapper classes before initializing the scroller.
 
+## Informational dots progress mode
+
+The Dots mode remains a progress indicator rather than pagination. JavaScript derives dot targets from the maximum logical scroll distance and the same item/group advance distance used by arrow navigation. Dots are non-interactive `<span>` elements with `aria-hidden="true"`; the parent retains `role="progressbar"`, updates `aria-valuenow`, and exposes the current visual position through `aria-valuetext`.
+
+Dot targets and active state are refreshed through the existing resize, mutation, Load More, Taxonomy Filter, AJAX pagination, editor rerender, RTL normalization, and teardown paths. A defensive maximum prevents unusually large result sets from producing unbounded indicator markup.
+
 ## Taxonomy Filter integration
 
 The Taxonomy Filter widget uses:
